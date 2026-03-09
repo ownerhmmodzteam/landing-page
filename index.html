@@ -93,13 +93,8 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
-
-        @keyframes shimmer {
-            to { background-position: 200% center; }
-        }
-
+        @keyframes shimmer { to { background-position: 200% center; } }
         @keyframes ios-loader { 0% { opacity: 1; } 100% { opacity: 0.1; } }
-        
         @keyframes iosAppear { 
             0% { opacity: 0; transform: translateY(15px) scale(0.98); } 
             100% { opacity: 1; transform: translateY(0) scale(1); } 
@@ -114,7 +109,6 @@
         }
         .ios-swal-title { color: #fff !important; font-size: 18px !important; font-weight: 600 !important; }
         .ios-swal-html { color: rgba(255,255,255,0.5) !important; font-size: 13px !important; }
-
     </style>
 </head>
 <body>
@@ -127,11 +121,9 @@
                 <source src="https://files.catbox.moe/tfbj11.mp4" type="video/mp4">
             </video>
         </div>
-
         <div class="app-info">
             <h1>HM MODZ STREAM</h1>
             <p>Welcome To My Apps</p>
-            
             <div class="ios-loader">
                 <div></div><div></div><div></div><div></div><div></div><div></div>
                 <div></div><div></div><div></div><div></div><div></div><div></div>
@@ -152,41 +144,79 @@
                 "move": { "enable": true, "speed": 0.5, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
             }
         });
-    
-        setTimeout(() => {
-            const content = document.getElementById('content');
-            content.style.transition = 'all 1s cubic-bezier(0.16, 1, 0.3, 1)';
-            content.style.opacity = '0';
-            content.style.transform = 'scale(1.02) translateY(-10px)';
 
-            Swal.fire({
-                title: 'Authenticating...',
-                html: 'connection to server in <b></b>',
-                timer: 3500,
-                timerProgressBar: true,
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                customClass: {
-                    popup: 'ios-swal-popup',
-                    title: 'ios-swal-title',
-                    htmlContainer: 'ios-swal-html'
-                },
-                didOpen: () => {
-                    Swal.showLoading();
-                    const b = Swal.getHtmlContainer().querySelector('b');
-                    setInterval(() => {
-                        const left = Swal.getTimerLeft();
-                        if(left) b.textContent = (left / 1000).toFixed(1) + 's';
-                    }, 100);
+        async function startApp() {
+            const CONFIG_URL = "URL_JSON_LU_DI_SINI"; 
+            const REDIRECT_ATTACK = "https://google.com";
+            const MAIN_SITE = "https://main-page-streambyhmmodz.netlify.app/";
+
+            let isUnderAttack = false;
+
+            try {
+                const response = await fetch(CONFIG_URL);
+                const data = await response.json();
+                isUnderAttack = data.isUnderAttack;
+            } catch (e) {
+                isUnderAttack = false;
+            }
+
+            setTimeout(() => {
+                if (isUnderAttack) {
+                    Swal.fire({
+                        title: 'Security Alert',
+                        text: 'Aplikasi terdeteksi terkena serangan. Mengalihkan ke jalur aman...',
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        timer: 3000,
+                        customClass: {
+                            popup: 'ios-swal-popup',
+                            title: 'ios-swal-title',
+                            htmlContainer: 'ios-swal-html'
+                        },
+                        didOpen: () => { Swal.showLoading(); }
+                    }).then(() => {
+                        window.location.href = REDIRECT_ATTACK;
+                    });
+                    return;
                 }
-            }).then(() => {
-                document.body.style.transition = '0.8s ease-in-out';
-                document.body.style.opacity = '0';
-                setTimeout(() => {
-                    window.location.href = "https://main-page-streambyhmmodz.netlify.app/";
-                }, 500);
-            });
-        }, 4500);
+
+                const content = document.getElementById('content');
+                content.style.transition = 'all 1s cubic-bezier(0.16, 1, 0.3, 1)';
+                content.style.opacity = '0';
+                content.style.transform = 'scale(1.02) translateY(-10px)';
+
+                Swal.fire({
+                    title: 'Authenticating...',
+                    html: 'connection to server in <b></b>',
+                    timer: 3500,
+                    timerProgressBar: true,
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    customClass: {
+                        popup: 'ios-swal-popup',
+                        title: 'ios-swal-title',
+                        htmlContainer: 'ios-swal-html'
+                    },
+                    didOpen: () => {
+                        Swal.showLoading();
+                        const b = Swal.getHtmlContainer().querySelector('b');
+                        setInterval(() => {
+                            const left = Swal.getTimerLeft();
+                            if(left) b.textContent = (left / 1000).toFixed(1) + 's';
+                        }, 100);
+                    }
+                }).then(() => {
+                    document.body.style.transition = '0.8s ease-in-out';
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.href = MAIN_SITE;
+                    }, 500);
+                });
+            }, 4500);
+        }
+
+        startApp();
     </script>
 </body>
 </html>
