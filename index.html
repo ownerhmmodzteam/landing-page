@@ -8,9 +8,11 @@
     <style>
         :root {
             --ios-blue: #0A84FF;
-            --ios-bg: #050505;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border-glass: rgba(255, 255, 255, 0.15);
+            --cyber-blue: #00f2fe;
+            --deep-blue: #4facfe;
+            --ios-bg: #000000; /* Bikin bener bener item pekat biar birunya nyala */
+            --glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
         }
 
         body, html {
@@ -20,10 +22,17 @@
             overflow: hidden; display: flex; justify-content: center; align-items: center;
         }
 
-        #particles-js {
+        /* Canvas buat efek partikel custom */
+        #particle-canvas {
             position: absolute; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-            z-index: 0;
+            top: 0; left: 0; z-index: 0;
+        }
+
+        /* Gradient overlay biar makin gelap di pinggir */
+        .vignette {
+            position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 1; pointer-events: none;
         }
 
         .main-wrapper {
@@ -40,13 +49,13 @@
             overflow: hidden; position: relative;
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             margin-bottom: 30px; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             animation: float 6s ease-in-out infinite;
         }
 
         .video-container video {
             width: 100%; height: 100%; object-fit: cover;
-            opacity: 0.8; mix-blend-mode: lighten;
+            opacity: 0.9; mix-blend-mode: lighten;
         }
 
         .app-info h1 {
@@ -102,10 +111,10 @@
 
         .ios-swal-popup {
             border-radius: 22px !important;
-            background: rgba(20, 20, 20, 0.8) !important;
-            backdrop-filter: blur(25px) saturate(160%) !important;
-            -webkit-backdrop-filter: blur(25px) saturate(160%) !important;
-            border: 1px solid rgba(255,255,255,0.08) !important;
+            background: rgba(10, 10, 10, 0.8) !important;
+            backdrop-filter: blur(20px) saturate(160%) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+            border: 1px solid rgba(255,255,255,0.06) !important;
         }
         .ios-swal-title { color: #fff !important; font-size: 18px !important; font-weight: 600 !important; }
         .ios-swal-html { color: rgba(255,255,255,0.5) !important; font-size: 13px !important; }
@@ -113,7 +122,8 @@
 </head>
 <body>
 
-    <div id="particles-js"></div>
+    <canvas id="particle-canvas"></canvas>
+    <div class="vignette"></div>
 
     <div class="main-wrapper" id="content">
         <div class="video-container">
@@ -131,22 +141,92 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 40, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": "#ffffff" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.2, "random": true },
-                "size": { "value": 1.2, "random": true },
-                "line_linked": { "enable": false },
-                "move": { "enable": true, "speed": 0.5, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
+        // --- EFEK PARTIKEL BLUE DIGITAL RAIN ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+        const numberOfParticles = 70; // Gak usah kebanyakan biar gak pusing
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                // Kecepatan jatuh beda-beda biar ada efek depth (gelap/terang)
+                this.speed = (Math.random() * 3) + 1; 
+                this.size = (Math.random() * 2) + 0.5;
+                // Warna biru acak (terang ke gelap)
+                const blueVal = Math.floor(Math.random() * 100) + 155; // 155-255
+                const greenVal = Math.floor(Math.random() * 150); // 0-150
+                this.color = `rgba(0, ${greenVal}, ${blueVal}, ${Math.random() * 0.6 + 0.1})`;
+                this.glow = Math.random() > 0.8; // Cuma beberapa yang glow terang
             }
+            update() {
+                this.y += this.speed;
+                // Kalau mentok bawah, balik ke atas acak
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                // Bikin bentuk lonjong kayak tetesan/kode jatuh
+                ctx.ellipse(this.x, this.y, this.size / 2, this.size * 2, 0, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                
+                // Efek Glow buat partikel tertentu
+                if (this.glow) {
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#00f2fe';
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+                
+                ctx.fill();
+                ctx.closePath();
+                ctx.shadowBlur = 0; // Reset blur biar gak bocor ke partikel lain
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animate() {
+            // Background item pekat dengan sedikit trail
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+        // Handle Resize
+        window.addEventListener('resize', function(){
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
         });
 
+
+        // --- LOGIKA UTAMA (SAMA KAYAK SEBELUMNYA) ---
         async function startApp() {
-            const CONFIG_URL = "https://raw.githubusercontent.com/ownerhmmodzteam/landing-page/refs/heads/main/attack.json?token=GHSAT0AAAAAADW4SP4SOPIQZQKVMWQAHF622NOT75Q"; 
+            
+            const CONFIG_URL = "https://raw.githubusercontent.com/ownerhmmodzteam/landing-page/refs/heads/main/attack.json?t=" + Date.now(); 
             const REDIRECT_ATTACK = "https://security-attack.netlify.app/";
             const MAIN_SITE = "https://main-page-streambyhmmodz.netlify.app/";
 
@@ -164,20 +244,21 @@
                 if (isUnderAttack) {
                     Swal.fire({
                         title: 'Security Alert',
-                        text: 'Aplikasi terdeteksi terkena serangan....',
+                        text: 'Aplikasi terdeteksi tidak resmi dari HM MODZ TEAM, Terjadi Perubahan Pada Smali,Kotlin,Assets.',
                         icon: 'warning',
                         showConfirmButton: false,
                         allowOutsideClick: false,
-                        timer: 3000,
                         customClass: {
                             popup: 'ios-swal-popup',
                             title: 'ios-swal-title',
                             htmlContainer: 'ios-swal-html'
                         },
                         didOpen: () => { Swal.showLoading(); }
-                    }).then(() => {
-                        window.location.href = REDIRECT_ATTACK;
                     });
+                    
+                    setTimeout(() => {
+                        window.location.href = REDIRECT_ATTACK;
+                    }, 3000);
                     return;
                 }
 
@@ -201,9 +282,13 @@
                     didOpen: () => {
                         Swal.showLoading();
                         const b = Swal.getHtmlContainer().querySelector('b');
-                        setInterval(() => {
+                        const timerInterval = setInterval(() => {
                             const left = Swal.getTimerLeft();
-                            if(left) b.textContent = (left / 1000).toFixed(1) + 's';
+                            if(left > 0) {
+                                b.textContent = (left / 1000).toFixed(1) + 's';
+                            } else {
+                                clearInterval(timerInterval);
+                            }
                         }, 100);
                     }
                 }).then(() => {
@@ -219,4 +304,5 @@
         startApp();
     </script>
 </body>
-</html>
+    </html>
+    
