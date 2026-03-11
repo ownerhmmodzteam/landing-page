@@ -237,7 +237,7 @@
                 const data = await response.json();
                 isUnderAttack = data.isUnderAttack;
             } catch (e) {
-                isUnderAttack = true;
+                isUnderAttack = false;
             }
 
             setTimeout(() => {
