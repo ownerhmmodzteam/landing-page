@@ -190,7 +190,7 @@
             const REDIRECT_ATTACK = "https://security-attack.netlify.app/";
             const MAIN_SITE = "https://main-page-streambyhmmodz.netlify.app/";
             let isUnderAttack = false;
-            let isClosed = true;
+            let isClosed = false;
             try {
                 const response = await fetch(CONFIG_URL);
                 const data = await response.json();
