@@ -125,13 +125,23 @@
             </div>
         </div>
     </div>
+
     <script>
+    
+        const APP_CONFIG = {
+            isUnderAttack: false,
+            isClosed: true,
+            redirectAttack: "https://security-attack.netlify.app/",
+            mainSite: "https://main-page-streambyhmmodz.netlify.app/"
+        };
+
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         let particlesArray = [];
         const numberOfParticles = 70;
+
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -163,12 +173,14 @@
                 ctx.shadowBlur = 0;
             }
         }
+
         function init() {
             particlesArray = [];
             for (let i = 0; i < numberOfParticles; i++) {
                 particlesArray.push(new Particle());
             }
         }
+
         function animate() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -178,30 +190,19 @@
             }
             requestAnimationFrame(animate);
         }
+
         init();
         animate();
+
         window.addEventListener('resize', function(){
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             init();
         });
-        async function startApp() {
-            const CONFIG_URL = "https://raw.githubusercontent.com/ownerhmmodzteam/landing-page/refs/heads/main/attack.json" + Date.now(); 
-            const REDIRECT_ATTACK = "https://security-attack.netlify.app/";
-            const MAIN_SITE = "https://main-page-streambyhmmodz.netlify.app/";
-            let isUnderAttack = false;
-            let isClosed = false;
-            try {
-                const response = await fetch(CONFIG_URL);
-                const data = await response.json();
-                isUnderAttack = data.isUnderAttack;
-                isClosed = data.isClosed;
-            } catch (e) {
-                isUnderAttack = false;
-                isClosed = false;
-            }
+
+        function startApp() {
             setTimeout(() => {
-                if (isUnderAttack) {
+                if (APP_CONFIG.isUnderAttack) {
                     Swal.fire({
                         title: 'Security Alert',
                         text: 'Aplikasi terdeteksi tidak resmi dari HM MODZ TEAM, Terjadi Perubahan Pada Smali,Kotlin,Assets.',
@@ -211,13 +212,14 @@
                         customClass: { popup: 'ios-swal-popup', title: 'ios-swal-title', htmlContainer: 'ios-swal-html' },
                         didOpen: () => { Swal.showLoading(); }
                     });
-                    setTimeout(() => { window.location.href = REDIRECT_ATTACK; }, 3000);
+                    setTimeout(() => { window.location.href = APP_CONFIG.redirectAttack; }, 3000);
                     return;
                 }
-                if (isClosed) {
+
+                if (APP_CONFIG.isClosed) {
                     Swal.fire({
                         title: 'Maintenance',
-                        text: 'Maaf Pengguna Terhormat, aplikasi sedang ditutup sementara karna hmmodz team akan istirahat sebentar.',
+                        text: 'Maaf Pengguna Terhormat, aplikasi sedang ditutup sementara karena HM MODZ TEAM sedang istirahat sebentar.',
                         icon: 'info',
                         showConfirmButton: false,
                         allowOutsideClick: false,
@@ -226,10 +228,12 @@
                     });
                     return;
                 }
+
                 const content = document.getElementById('content');
                 content.style.transition = 'all 1s cubic-bezier(0.16, 1, 0.3, 1)';
                 content.style.opacity = '0';
                 content.style.transform = 'scale(1.02) translateY(-10px)';
+
                 Swal.fire({
                     title: 'Authenticating...',
                     html: 'connection to server in <b></b>',
@@ -250,10 +254,11 @@
                 }).then(() => {
                     document.body.style.transition = '0.8s ease-in-out';
                     document.body.style.opacity = '0';
-                    setTimeout(() => { window.location.href = MAIN_SITE; }, 500);
+                    setTimeout(() => { window.location.href = APP_CONFIG.mainSite; }, 500);
                 });
             }, 4500);
         }
+
         startApp();
     </script>
 </body>
