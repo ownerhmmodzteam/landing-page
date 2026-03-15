@@ -70,7 +70,7 @@
     <script>
         const APP_CONFIG = {
             isUnderAttack: false,
-            isClosed: false,
+            isClosed: true,
             isUpdate: false,
             redirectAttack: "https://security-attack.netlify.app/",
             mainSite: "https://main-page-streambyhmmodz.netlify.app/",
@@ -150,8 +150,8 @@
 
                 if (APP_CONFIG.isClosed) {
                     Swal.fire({
-                        title: 'Maintenance',
-                        text: 'Maaf Pengguna Terhormat, aplikasi sedang ditutup sementara karena sedang ada pemulihan server.',
+                        title: 'Server Offline',
+                        text: 'Maaf Pengguna Terhormat, aplikasi telah di tutup.',
                         icon: 'info',
                         showConfirmButton: false,
                         allowOutsideClick: false,
