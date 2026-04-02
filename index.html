@@ -44,7 +44,7 @@
         @keyframes iosAppear { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         .ios-swal-popup { border-radius: 22px !important; background: rgba(15, 15, 15, 0.9) !important; backdrop-filter: blur(25px) !important; border: 1px solid rgba(255,255,255,0.1) !important; }
         .ios-swal-title { color: #fff !important; font-size: 18px !important; }
-        .ios-swal-html { color: rgba(255,255,255,0.6) !important; }
+        .ios-swal-html { color: rgba(255,255,255,0.8) !important; font-weight: 500 !important; }
         .swal2-styled.swal2-confirm { background-color: #0A84FF !important; border-radius: 12px !important; padding: 10px 25px !important; }
     </style>
 </head>
@@ -71,9 +71,9 @@
         const APP_CONFIG = {
             isUnderAttack: false,
             isClosed: false,
-            isUpdate: false,
+            isUpdate: true,
             redirectAttack: "security/index.html",
-            mainSite: "home.html",
+            mainSite: "home/index.html",
             updateSite: "update/index.html"
         };
 
@@ -87,9 +87,7 @@
         }
 
         class Particle {
-            constructor() {
-                this.init();
-            }
+            constructor() { this.init(); }
             init() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
@@ -126,7 +124,7 @@
                 if (APP_CONFIG.isUnderAttack) {
                     Swal.fire({
                         title: 'Security Alert',
-                        text: 'Aplikasi terdeteksi tidak resmi dari HM MODZ TEAM, Terjadi Perubahan Pada Smali,Kotlin,Assets.',
+                        text: 'Aplikasi terdeteksi tidak resmi dari HM MODZ TEAM.',
                         icon: 'warning',
                         showConfirmButton: false,
                         allowOutsideClick: false,
@@ -139,7 +137,7 @@
                 if (APP_CONFIG.isUpdate) {
                     Swal.fire({
                         title: 'Update Available',
-                        text: 'Versi terbaru sudah tersedia. Silakan update untuk fitur lebih baik dan pengalaman stream terbaik.',
+                        text: 'Versi terbaru sudah tersedia. Silakan update sekarang.',
                         icon: 'info',
                         confirmButtonText: 'Update Now',
                         allowOutsideClick: false,
@@ -150,8 +148,8 @@
 
                 if (APP_CONFIG.isClosed) {
                     Swal.fire({
-                        title: 'Server Maintance',
-                        text: 'Maaf Pengguna Terhormat, aplikasi sedang dalam pemulihan server silahkan tunggu beberapa menit.',
+                        title: 'Server Maintenance',
+                        text: 'Maaf, aplikasi sedang dalam pemulihan server.',
                         icon: 'info',
                         showConfirmButton: false,
                         allowOutsideClick: false,
@@ -166,25 +164,26 @@
                 content.style.transform = 'scale(1.05)';
                 content.style.transition = 'all 0.8s ease';
 
+                let timerInterval;
                 Swal.fire({
                     title: 'Authenticating...',
-                    html: 'Connection to server in <b></b>',
+                    html: '<div style="margin-top:8px;">Connection to server in <b id="timer-val" style="color:#0A84FF;">3.0s</b></div>',
                     timer: 3000,
                     timerProgressBar: true,
                     allowOutsideClick: false,
                     showConfirmButton: false,
                     customClass: { popup: 'ios-swal-popup', title: 'ios-swal-title', htmlContainer: 'ios-swal-html' },
                     didOpen: () => {
-                        Swal.showLoading();
-                        const b = Swal.getHtmlContainer().querySelector('b');
-                        const timerInterval = setInterval(() => {
+                        const b = Swal.getHtmlContainer().querySelector('#timer-val');
+                        timerInterval = setInterval(() => {
                             const left = Swal.getTimerLeft();
                             if(left > 0) b.textContent = (left / 1000).toFixed(1) + 's';
-                            else clearInterval(timerInterval);
                         }, 100);
-                    }
+                    },
+                    willClose: () => { clearInterval(timerInterval); }
                 }).then(() => {
                     document.body.style.opacity = '0';
+                    document.body.style.transition = 'opacity 0.5s ease';
                     setTimeout(() => { window.location.href = APP_CONFIG.mainSite; }, 500);
                 });
             }, 4500);
