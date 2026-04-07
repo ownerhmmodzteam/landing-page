@@ -70,7 +70,7 @@
     <script>
         const APP_CONFIG = {
             isUnderAttack: false,
-            isClosed: false,
+            isClosed: true,
             isUpdate: false,
             redirectAttack: "security/index.html",
             mainSite: "home/index.html",
@@ -149,7 +149,7 @@
                 if (APP_CONFIG.isClosed) {
                     Swal.fire({
                         title: 'Server Maintenance',
-                        text: 'Maaf, aplikasi sedang dalam pemulihan server.',
+                        text: 'Maaf, aplikasi sedang dalam perbaikan.',
                         icon: 'info',
                         showConfirmButton: false,
                         allowOutsideClick: false,
