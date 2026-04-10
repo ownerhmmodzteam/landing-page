@@ -11,7 +11,7 @@
             --bg-image: url('ltr.png');
             --accent: #0A84FF;
             --glass: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.12);
+            --border: rgba(255, 255, 255, 0.10);
         }
 
         body {
@@ -39,7 +39,7 @@
         }
 
         .glass-card:active {
-            transform: scale(0.97);
+            transform: scale(0.99);
         }
 
         .item-image {
@@ -54,7 +54,7 @@
         .content-overlay {
             position: relative;
             z-index: 5;
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.2) 60%, transparent 100%);
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.2) 60%, transparent 120%);
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -154,7 +154,7 @@
                     <img src="anim.png" class="item-image" onerror="this.src='https://images.unsplash.com/photo-1578632292335-df3abbb0d586?w=400'">
                     <div class="content-overlay">
                         <h4 class="font-bold text-sm">Anime</h4>
-                        <p class="text-[10px] text-white/50">Streaming Sub Indo</p>
+                        <p class="text-[10px] text-white/50">Streaming Sub Indo dan terupdate</p>
                     </div>
                 </div>
 
@@ -162,7 +162,7 @@
                     <img src="donghua.png" class="item-image" onerror="this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400'">
                     <div class="content-overlay">
                         <h4 class="font-bold text-sm">Donghua</h4>
-                        <p class="text-[10px] text-white/50">3D Animation HD</p>
+                        <p class="text-[10px] text-white/50">3D Animation, Subtitle Indo</p>
                     </div>
                 </div>
 
@@ -178,10 +178,10 @@
                     <img src="film.png" class="item-image" onerror="this.src='https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400'">
                     <div class="content-overlay">
                         <h4 class="font-bold text-sm">Movies</h4>
-                        <p class="text-[10px] text-white/50">Cinema XXI & Box Office</p>
+                        <p class="text-[10px] text-white/50">Cinema Stream and Film Fav</p>
                     </div>
                 </div>
-                   <div class="glass-card h-56" onclick="openIOSAlert('Dracin', 'Server Sedang Di Tutup', 'tutup/index.html')">
+                   <div class="glass-card h-56" onclick="openIOSAlert('Dracin', 'Server Sedang Dalam Perbaikan', 'tutup/index.html')">
                     <img src="dracin.png" class="item-image" onerror="this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400'">
                     <div class="content-overlay">
                         <h4 class="font-bold text-sm">Dracin</h4>
@@ -207,11 +207,11 @@
             <div class="grid gap-4">
                 <div class="glass-card p-4 flex items-center gap-4">
                     <div class="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
-                        <img src="https://files.catbox.moe/4y3suf.png" class="w-full h-full object-cover">
+                        <img src="strm.png" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <h4 class="font-bold text-base">HM MODZ STREAM</h4>
-                        <p class="text-[10px] text-green-400">Versi 6.7 Alpha</p>
+                        <p class="text-[10px] text-green-400">Versi 6.8 - Online Server</p>
                     </div>
                 </div>
                  <div class="grid gap-4">
@@ -221,7 +221,7 @@
                     </div>
                     <div>
                         <h4 class="font-bold text-base">HM TUBE</h4>
-                        <p class="text-[10px] text-green-400">Version 1.0 Beta</p>
+                        <p class="text-[10px] text-green-400">Version 1.0 Beta - Offline Server</p>
                     </div>
                 </div>
             </div>
@@ -236,7 +236,7 @@
             </button>
             <button onclick="switchTab('projects', this)" class="btn-nav flex flex-col items-center gap-1">
                 <i class="fa-solid fa-layer-group text-lg"></i>
-                <span class="text-[8px] font-bold uppercase">Builds</span>
+                <span class="text-[8px] font-bold uppercase">Projects</span>
             </button>
         </nav>
     </div>
@@ -258,7 +258,7 @@
                 <img src="https://files.catbox.moe/4y3suf.png" class="w-16 h-16 rounded-2xl mx-auto mb-3">
                 <h3 class="text-base font-bold">HM MODZ TEAM</h3>
                 <p class="text-[9px] text-blue-500 font-black uppercase tracking-widest">Official Owner</p>
-                <p class="text-[9px] text-black-500 font-black uppercase tracking-widest">Version 6.7</p>
+                <p class="text-[9px] text-black-500 font-black uppercase tracking-widest">Version 6.8</p>
             </div>
             <button class="ios-btn" onclick="closeProfile()">Tutup</button>
         </div>
